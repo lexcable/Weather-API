@@ -3,6 +3,9 @@
 # Script to add all changes, commit each file individually, and push to origin main
 # Improved version with error handling and checks for no changes, including untracked files
 # Displays count of changes committed successfully and failed commits
+# Limits commit to 5000 files per run
+
+MAX_FILES=5000
 
 # Get list of modified files
 modified_files=$(git status --porcelain | grep -E '^[ M]' | awk '{print $2}')
@@ -17,8 +20,11 @@ $untracked_files"
 # Remove empty lines
 files=$(echo "$files" | sed '/^$/d')
 
+# Limit to MAX_FILES
+files_to_commit=$(echo "$files" | head -n $MAX_FILES)
+
 # Check if there are any changes
-if [ -z "$files" ]; then
+if [ -z "$files_to_commit" ]; then
   echo "No changes to commit."
   exit 0
 fi
@@ -27,7 +33,7 @@ commit_count=0
 fail_count=0
 
 # Commit each file individually
-for file in $files; do
+for file in $files_to_commit; do
   echo "Adding $file"
   git add "$file"
   # Check if file has staged changes
@@ -53,3 +59,4 @@ fi
 echo "All changes processed."
 echo "Total files committed successfully: $commit_count"
 echo "Total files failed to commit: $fail_count"
+echo "Committed up to $MAX_FILES files in this run. Run the script again to commit remaining changes."
