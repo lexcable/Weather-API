@@ -2,3 +2,10 @@ vendor/
 node_modules/
 storage/
 public/
+ESLint# Project Structure
+
+* vendor/
+* node_modules/
+* storage/
+* public/
+* .eslintrc.json
