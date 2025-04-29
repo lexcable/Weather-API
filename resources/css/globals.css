@@ -1,0 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import 'rippleui/styles.css';
+
+/* Add your global styles here */
+
