@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: weather-api-php
+    container_name: weather-api-php
+    ports:
+      - "9000:9000"
+    volumes:
+      - ./:/var/www/html
+    environment:
+      - COMPOSER_ALLOW_SUPERUSER=1
+    networks:
+      - weather-network
+
+  db:
+    image: mysql:8.0
+    container_name: weather-api-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: weather_api
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    ports:
+      - "3306:3306"
+    volumes:
+      - dbdata:/var/lib/mysql
+    networks:
+      - weather-network
+
+networks:
+  weather-network:
+    driver: bridge
+
+volumes:
+  dbdata:
